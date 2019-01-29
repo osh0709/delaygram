@@ -1,27 +1,54 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "bootstrap/dist/css/bootstrap.css";
+import axios from "axios";
+import "./App.css";
+import Router from "./Router";
+import NavBar from "./components/NavBar";
+// import Homepage from "./pages/Homepage.js";
+// import {Link} from "react-router-dom";
 
-class App extends Component {
-  render() {
+
+class App extends React.Component {
+  state = {
+    users: [],
+    loading: true,
+
+  }
+
+  componentDidMount = () => {
+    axios({
+      method: "get",
+      url: "https://insta.nextacademy.com/api/v1/users/",
+    })
+
+    .then(result => {
+      this.setState({
+        users: result.data,
+        loading: false,
+      })
+    })
+
+    .catch(error => {
+      console.log("Sorry", error)
+    })
+  }
+
+  render(){
+    let { users, loading } = this.state
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+<>
+      <div className = "bar" >
+        <div className = "navBar">
+
+          <NavBar/>
+
+        </div>
+      
+      
       </div>
-    );
+        <Router users = {users} loading = {loading}/>
+     </>
+    )
   }
 }
 
